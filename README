@@ -1,0 +1,13 @@
+ARMEIRO
+----------------------
+Simple operating system for ARM architecture (ARM926).
+
+HOW TO TEST:
+----------------------
+1 - Compile:
+$	make
+2 - run qemu:
+$	qemu-system-armw -m 64M -kernel kernel.bin -M versatilepb
+
+
+Marcos Medeiros.
