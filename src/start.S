@@ -63,6 +63,7 @@ ENTRY(boot_start)
 .global Kmap_end
 .global Kmap_sp_svc
 .global Kmap_sp_irq
+.global Kmap_sp_abt
 Kmap_start:	.word xKmap_start
 Kmap_addr:	.word xKmap_addr
 Kmap_end:	.word xKmap_end

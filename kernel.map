@@ -1,0 +1,297 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+active_queue        0x10              bin/scheduler.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD bin/math.o
+LOAD bin/mmu.o
+LOAD bin/start.o
+LOAD bin/cpu.o
+LOAD bin/exception.o
+LOAD bin/irq.o
+LOAD bin/klist.o
+LOAD bin/kmalloc.o
+LOAD bin/main.o
+LOAD bin/memmgr.o
+LOAD bin/memory.o
+LOAD bin/mmuc.o
+LOAD bin/paging.o
+LOAD bin/printk.o
+LOAD bin/scheduler.o
+LOAD bin/serial.o
+LOAD bin/timer.o
+                0x00000000                xKmap_start = .
+
+.init           0x00010000       0x64
+                0x00010000                xKmap_addr = .
+ *(.init)
+ .init          0x00010000       0x64 bin/start.o
+
+.text           0x00010064     0x24ec
+ *(.text)
+ .text          0x00010064       0xf8 bin/math.o
+                0x00010064                __aeabi_uidivmod
+                0x00010074                __aeabi_idivmod
+                0x00010084                __aeabi_uidiv
+                0x000100d0                __aeabi_idiv
+ .text          0x0001015c       0x40 bin/mmu.o
+                0x0001015c                __mmu_getttbl
+                0x00010164                __mmu_setttbl
+                0x0001016c                __mmu_getfsr
+                0x00010174                __mmu_getfar
+                0x0001017c                __mmu_getdomain
+                0x00010184                __mmu_setdomain
+                0x0001018c                __mmu_getcr
+                0x00010194                __mmu_setcr
+ .text          0x0001019c      0x2dc bin/start.o
+                0x0001019c                boot_start
+                0x000101bc                Kmap_start
+                0x000101c0                Kmap_addr
+                0x000101c4                Kmap_end
+                0x000101c8                Kmap_sp_svc
+                0x000101cc                Kmap_sp_irq
+                0x000101d0                Kmap_sp_abt
+                0x000101e8                __cpu_saved_ctx
+                0x000101ec                __cpu_is_save
+                0x000101f0                __cpu_do_context_switch
+                0x00010264                cpu_delay
+                0x0001036c                irq_enable
+                0x0001037c                irq_disable
+                0x000103a8                fiq_enable
+                0x000103b8                fiq_disable
+                0x00010444                __cpu_getid
+                0x0001044c                __cpu_getcachet
+                0x00010454                __cpu_gettcmst
+ .text          0x00010478      0x530 bin/cpu.o
+                0x00010478                show_stack_trace
+                0x000104cc                cpu_dump
+                0x000108fc                cpu_init
+                0x00010960                cpu_save_context
+                0x00010994                cpu_switch_context
+ .text          0x000109a8       0x78 bin/exception.o
+                0x000109a8                arm_fiq
+                0x000109c0                arm_irq
+                0x000109c4                arm_abt
+                0x000109f0                syscall_handler
+ .text          0x00010a20      0x164 bin/irq.o
+                0x00010a20                irq_handler
+                0x00010a70                irq_init
+                0x00010a80                irq_enable_line
+                0x00010aa0                irq_disable_line
+                0x00010ac0                irq_install_isr
+                0x00010af8                irq_uninstall_isr
+                0x00010b34                irq_generate_softint
+                0x00010b60                irq_clear_softint
+ .text          0x00010b84      0x180 bin/klist.o
+                0x00010b84                klist_init
+                0x00010ba0                klist_add_head
+                0x00010bec                klist_add_tail
+                0x00010c44                klist_next
+                0x00010c84                klist_remove
+ .text          0x00010d04      0x184 bin/kmalloc.o
+                0x00010d04                kmalloc_init
+                0x00010d54                kmalloc
+                0x00010e34                kfree
+ .text          0x00010e88       0xb8 bin/main.o
+                0x00010e88                kmain
+ .text          0x00010f40      0xaa4 bin/memmgr.o
+                0x00010f40                pf_find_free
+                0x00011028                pf_state
+                0x00011050                pf_mark
+                0x000111b8                pf_alloc
+                0x000112f0                page_alloc_align
+                0x000114ec                page_frame_alloc
+                0x00011624                pf_free
+                0x000116a4                pf_mark_kernel
+                0x00011820                mm_init
+ .text          0x000119e4      0x1b8 bin/memory.o
+                0x000119e4                memclr
+                0x00011a38                memset
+                0x00011a9c                memcpy
+                0x00011afc                membitset
+                0x00011b54                membitclr
+ .text          0x00011b9c       0xbc bin/mmuc.o
+                0x00011b9c                domain_set_protection
+                0x00011bbc                domain_setup
+                0x00011c04                page_dir_set
+                0x00011c30                mmu_enable
+                0x00011c44                mmu_disable
+ .text          0x00011c58      0x1f0 bin/paging.o
+                0x00011c58                __section_map_identy
+                0x00011cd0                setup_kernel_pgdir
+                0x00011d80                paging_init
+ .text          0x00011e48      0x300 bin/printk.o
+                0x00011e48                printk
+ .text          0x00012148      0x338 bin/scheduler.o
+                0x00012148                C_task2
+                0x00012164                C_task1
+                0x00012180                scheduler_create_task
+                0x0001226c                scheduler_init
+                0x00012438                scheduler
+ .text          0x00012480       0x78 bin/serial.o
+                0x00012480                serial_irq_handler
+                0x000124a0                serial_init
+                0x000124d8                serial_send_char
+ .text          0x000124f8       0x58 bin/timer.o
+                0x000124f8                timer_irq_handler
+                0x0001250c                timer_init
+
+.data           0x00012550       0x58
+ *(.data)
+ .data          0x00012550        0x0 bin/math.o
+ .data          0x00012550        0x0 bin/mmu.o
+ .data          0x00012550        0x0 bin/start.o
+ .data          0x00012550        0x0 bin/cpu.o
+ .data          0x00012550        0x0 bin/exception.o
+ .data          0x00012550        0x0 bin/irq.o
+ .data          0x00012550        0x0 bin/klist.o
+ .data          0x00012550        0x0 bin/kmalloc.o
+ .data          0x00012550        0x0 bin/main.o
+ .data          0x00012550        0x0 bin/memmgr.o
+ .data          0x00012550        0x0 bin/memory.o
+ .data          0x00012550        0x0 bin/mmuc.o
+ .data          0x00012550        0x0 bin/paging.o
+ .data          0x00012550        0x0 bin/printk.o
+ .data          0x00012550       0x58 bin/scheduler.o
+ .data          0x000125a8        0x0 bin/serial.o
+ .data          0x000125a8        0x0 bin/timer.o
+
+.rodata         0x000125a8        0x4
+ *(.rodata)
+ .rodata        0x000125a8        0x4 bin/kmalloc.o
+                0x000125a8                __heap_pages
+
+.bss            0x000125ac      0x89c
+ *(.bss)
+ .bss           0x000125ac        0x0 bin/math.o
+ .bss           0x000125ac        0x0 bin/mmu.o
+ .bss           0x000125ac        0x0 bin/start.o
+ .bss           0x000125ac        0x0 bin/cpu.o
+ .bss           0x000125ac        0x0 bin/exception.o
+ .bss           0x000125ac       0x80 bin/irq.o
+                0x000125ac                isr_handler_table
+ .bss           0x0001262c        0x0 bin/klist.o
+ .bss           0x0001262c       0x10 bin/kmalloc.o
+                0x0001262c                heap_start
+ .bss           0x0001263c        0x0 bin/main.o
+ .bss           0x0001263c      0x808 bin/memmgr.o
+ .bss           0x00012e44        0x0 bin/memory.o
+ .bss           0x00012e44        0x0 bin/mmuc.o
+ .bss           0x00012e44        0x4 bin/paging.o
+                0x00012e44                __kernel_pgdir
+ .bss           0x00012e48        0x0 bin/printk.o
+ .bss           0x00012e48        0x0 bin/scheduler.o
+ .bss           0x00012e48        0x0 bin/serial.o
+ .bss           0x00012e48        0x0 bin/timer.o
+                0x00013e48                . = (. + 0x1000)
+                0x00013e48                Kstack_svc_addr = .
+                0x00014e48                . = (. + 0x1000)
+                0x00014e48                Kstack_irq_addr = .
+                0x00015248                . = (. + 0x400)
+                0x00015248                Kstack_fiq_addr = .
+                0x00016248                . = (. + 0x1000)
+                0x00016248                Kstack_usys_addr = .
+                0x00017248                . = (. + 0x1000)
+                0x00017248                Kstack_abt_addr = .
+
+.others         0x00017248      0x694
+ *(*)
+ .glue_7        0x00000000        0x0 linker stubs
+ .glue_7t       0x00000000        0x0 linker stubs
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+ .v4_bx         0x00000000        0x0 linker stubs
+ .ARM.attributes
+                0x00017248       0x24 bin/math.o
+ .iplt          0x00000000        0x0 bin/math.o
+ .rel.iplt      0x00000000        0x0 bin/math.o
+ .igot.plt      0x00000000        0x0 bin/math.o
+ .ARM.attributes
+                0x0001726c       0x24 bin/mmu.o
+ .ARM.attributes
+                0x00017290       0x24 bin/start.o
+ .rodata.str1.4
+                0x000172b4       0xe8 bin/cpu.o
+                                 0xec (size before relaxing)
+ .comment       0x0001739c       0x11 bin/cpu.o
+                                 0x12 (size before relaxing)
+ .ARM.attributes
+                0x000173ad       0x34 bin/cpu.o
+ *fill*         0x000173e1        0x3 00
+ .rodata.str1.4
+                0x000173e4       0x34 bin/exception.o
+                                 0x3c (size before relaxing)
+ .comment       0x00000000       0x12 bin/exception.o
+ .ARM.attributes
+                0x00017418       0x34 bin/exception.o
+ .comment       0x00000000       0x12 bin/irq.o
+ .ARM.attributes
+                0x0001744c       0x34 bin/irq.o
+ .comment       0x00000000       0x12 bin/klist.o
+ .ARM.attributes
+                0x00017480       0x34 bin/klist.o
+ .rodata.str1.4
+                0x000174b4       0x62 bin/kmalloc.o
+                                 0x64 (size before relaxing)
+ .comment       0x00000000       0x12 bin/kmalloc.o
+ .ARM.attributes
+                0x00017516       0x34 bin/kmalloc.o
+ *fill*         0x0001754a        0x2 00
+ .rodata.str1.4
+                0x0001754c       0x69 bin/main.o
+                                 0x6c (size before relaxing)
+ .comment       0x00000000       0x12 bin/main.o
+ .ARM.attributes
+                0x000175b5       0x34 bin/main.o
+ *fill*         0x000175e9        0x3 00
+ .rodata.str1.4
+                0x000175ec       0x7f bin/memmgr.o
+                                 0x80 (size before relaxing)
+ .comment       0x00000000       0x12 bin/memmgr.o
+ .ARM.attributes
+                0x0001766b       0x34 bin/memmgr.o
+ .comment       0x00000000       0x12 bin/memory.o
+ .ARM.attributes
+                0x0001769f       0x34 bin/memory.o
+ *fill*         0x000176d3        0x1 00
+ .rodata.str1.4
+                0x000176d4       0x35 bin/mmuc.o
+                                 0x38 (size before relaxing)
+ .comment       0x00000000       0x12 bin/mmuc.o
+ .ARM.attributes
+                0x00017709       0x34 bin/mmuc.o
+ *fill*         0x0001773d        0x3 00
+ .rodata.str1.4
+                0x00017740       0x28 bin/paging.o
+ .comment       0x00000000       0x12 bin/paging.o
+ .ARM.attributes
+                0x00017768       0x34 bin/paging.o
+ .rodata.str1.4
+                0x0001779c       0x25 bin/printk.o
+                                 0x28 (size before relaxing)
+ .comment       0x00000000       0x12 bin/printk.o
+ .ARM.attributes
+                0x000177c1       0x34 bin/printk.o
+ *fill*         0x000177f5        0x3 00
+ .rodata.str1.4
+                0x000177f8       0x38 bin/scheduler.o
+ .comment       0x00000000       0x12 bin/scheduler.o
+ .ARM.attributes
+                0x00017830       0x34 bin/scheduler.o
+ COMMON         0x00017864       0x10 bin/scheduler.o
+                0x00017864                active_queue
+ .comment       0x00000000       0x12 bin/serial.o
+ .ARM.attributes
+                0x00017874       0x34 bin/serial.o
+ .comment       0x00000000       0x12 bin/timer.o
+ .ARM.attributes
+                0x000178a8       0x34 bin/timer.o
+                0x000178dc                xKmap_end = .
+OUTPUT(bin/kernel.elf elf32-littlearm)

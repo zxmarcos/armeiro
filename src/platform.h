@@ -22,5 +22,6 @@ extern u32 Kmap_addr;
 extern u32 Kmap_end;
 extern u32 Kmap_sp_svc;
 extern u32 Kmap_sp_irq;
+extern u32 Kmap_sp_abt;
 
 #endif
