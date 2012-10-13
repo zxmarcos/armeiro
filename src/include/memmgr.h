@@ -19,7 +19,7 @@
 struct pgtbl_t { u32 val; };
 
 /* coarse page table 256x4kb = 1MB */
-struct pgcrs_t { struct pgtbl_t *tbl[256]; };
+struct pgcoarse_t { struct pgtbl_t *tbl[256]; };
 
 /* translation table / page directory 32kb */
 struct pgdir_t { void *pgtbl[4096]; };
