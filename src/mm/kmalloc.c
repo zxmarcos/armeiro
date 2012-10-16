@@ -3,8 +3,10 @@
  * First Fit
  * Marcos Medeiros
  */
-#include "platform.h"
-#include "memmgr.h"
+#include <asm/platform.h>
+#include <kernel/mm.h>
+#include <memory.h>
+#include <printk.h>
 
 #define NODE_PTR(blk)	((u8 *) blk + sizeof(kmblock_t))
 #define NEXT_NODE(blk)	\

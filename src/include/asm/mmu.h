@@ -1,8 +1,8 @@
-#ifndef __ARM_MMU_H
-#define __ARM_MMU_H
+#ifndef __MMU_H
+#define __MMU_H
 
-#include "base.h"
-#include "memmgr.h"
+#include <kernel/types.h>
+#include <kernel/mm.h>
 
 /* assembly level */
 u32 __mmu_getttbl();

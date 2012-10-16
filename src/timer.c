@@ -1,15 +1,16 @@
 /* arm timer
  * Marcos Medeiros
  */
-#include "io.h"
-#include "platform.h"
-#include "cpu.h"
-#include "scheduler.h"
+#include <asm/io.h>
+#include <asm/platform.h>
+#include <asm/cpu.h>
+#include <kernel/scheduler.h>
+#include <kernel/irq.h>
 
 #define TIMER_IRQ_NUM	5
 #define IOBASE	0x101e3000
-#define rwrite(r, v)	io_write32(IOBASE + r, v)
-#define rread(r)		io_read32(IOBASE + r)
+#define rwrite(r, v)	writel(IOBASE + r, v)
+#define rread(r)		readl(IOBASE + r)
 
 enum TimerRegisters {
 	T1_LOAD = 0x00,

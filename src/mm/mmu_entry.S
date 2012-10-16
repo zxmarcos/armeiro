@@ -1,4 +1,4 @@
-#include "asm.h"
+#include <asm/asm.h>
 
 ENTRY(__mmu_getttbl)
 	mrc		p15, #0, r0, c2, c0, #0

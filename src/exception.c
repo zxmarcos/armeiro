@@ -1,11 +1,11 @@
 /* ARM exceptions
  * Marcos Medeiros
  */
-#include "io.h"
-#include "cpu.h"
-#include "mmu.h"
-#include "platform.h"
-#include "scheduler.h"
+#include <asm/io.h>
+#include <asm/cpu.h>
+#include <asm/mmu.h>
+#include <asm/platform.h>
+#include <kernel/scheduler.h>
 
 void __CPU_FIQ arm_fiq()
 {

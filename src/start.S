@@ -2,7 +2,7 @@
  * Kernel entry point
  * Marcos Medeiros
  */
-#include "asm.h"
+#include "asm/asm.h"
 .section .init
 
 @ =============================================================================
@@ -46,7 +46,7 @@ excpt_swi_caller:
 	b	syscall_handler_entry
 
 ivector_table_end:
-	.word 0xDEADC0DE
+	.word 0xdeadc0de
 
 ENTRY(boot_start)
 	ldr		sp, =Kstack_svc_addr	@ setup our svc stack

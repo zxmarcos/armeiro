@@ -1,10 +1,14 @@
 /* kernel printk implementation
  * Marcos Medeiros
  */
-#include "io.h"
-#include "platform.h"
-#include "serial.h"
+#include <asm/io.h>
+#include <asm/platform.h>
+#include <asm/serial.h>
 #include <stdarg.h>
+#include <printk.h>
+#include <memory.h>
+ 
+#define DECIMAL_MAX	12
 
 static inline void putk(u32 c)
 {
@@ -39,14 +43,14 @@ static inline void printhexL(u32 val)
 
 static inline void printdec(u32 val)
 {
-	u32 chr[11];
-	memclr(chr, 11*sizeof(u32));
+	u32 chr[DECIMAL_MAX];
+	memclr(chr, DECIMAL_MAX * sizeof(u32));
 	int i = 0;
 	do {
 		chr[i] = 0x30 + (val % 10);
 		val /= 10;
 		i++;
-	} while ((val != 0) && (i < 11));
+	} while ((val != 0) && (i < DECIMAL_MAX));
 	i--;
 	while (i >= 0) {
 		putk(chr[i]);
@@ -114,7 +118,7 @@ void printk(const char *fmt, ...)
 				if (*fmt == 'd')
 					size = 32;
 				else {
-					fmt-=2;
+					fmt -= 2;
 					size = 32;
 				}
 				fmt++;

@@ -2,11 +2,12 @@
  * ARM CPU stuff
  * Marcos Medeiros
  */
-#include "base.h"
-#include "cpu.h"
-#include "platform.h"
-#include "task.h"
-
+#include <kernel/types.h>
+#include <asm/cpu.h>
+#include <asm/platform.h>
+#include <kernel/task.h>
+#include <memory.h>
+#include <printk.h>
 
 /* assembly level */
 extern void __cpu_do_context_switch(struct cpu_ctx *ctx);

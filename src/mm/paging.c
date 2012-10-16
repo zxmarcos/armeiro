@@ -1,10 +1,11 @@
 /* Paging code
  * Marcos Medeiros
  */
-#include "base.h"
-#include "mmu.h"
-#include "memmgr.h"
-#include "platform.h"
+#include <kernel/types.h>
+#include <asm/mmu.h>
+#include <kernel/mm.h>
+#include <asm/platform.h>
+#include <errno.h>
 
 #define KERNEL_DOMAIN	0
 

@@ -4,13 +4,16 @@
  */
 
 
-#include "base.h"
-#include "platform.h"
-#include "cpu.h"
-#include "task.h"
-#include "scheduler.h"
-#include "memmgr.h"
-#include "klist.h"
+#include <kernel/task.h>
+#include <kernel/scheduler.h>
+#include <kernel/mm.h>
+#include <asm/cpu.h>
+#include <asm/context.h>
+#include <asm/platform.h>
+#include <kernel/types.h>
+#include <klist.h>
+#include <printk.h>
+#include <memory.h>
 
 #define PID_BASE	256
 

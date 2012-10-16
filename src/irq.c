@@ -2,13 +2,17 @@
  * IRQ handling for versatilepb
  * Marcos Medeiros
  */
-#include "io.h"
-#include "platform.h"
-#include "cpu.h"
+#include <asm/io.h>
+#include <asm/platform.h>
+#include <asm/cpu.h>
+#include <asm/context.h>
+#include <kernel/irq.h>
+#include <errno.h>
+#include <memory.h>
 
 #define IOBASE	0x10140000
-#define rwrite(r, v)	io_write32(IOBASE + r, v)
-#define rread(r)		io_read32(IOBASE + r)
+#define rwrite(r, v)	writel(IOBASE + r, v)
+#define rread(r)		readl(IOBASE + r)
 
 enum VICRegisters
 {

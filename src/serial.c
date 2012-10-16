@@ -1,13 +1,16 @@
 /* VersatilePB uart0 serial
  * Marcos Medeiros
  */
-#include "io.h"
-#include "platform.h"
-#include "cpu.h"
+#include <asm/io.h>
+#include <asm/platform.h>
+#include <asm/cpu.h>
+#include <kernel/irq.h>
+#include <kernel/types.h>
+
 #define IOBASE			0x101f1000
-#define rwrite(r, v)	io_write32(IOBASE + r, v)
-#define rwrite8(r, v)	io_write8(IOBASE + r, v)
-#define rread(r)		io_read32(IOBASE + r)
+#define rwrite(r, v)	writel(IOBASE + r, v)
+#define rwrite8(r, v)	writeb(IOBASE + r, v)
+#define rread(r)		readl(IOBASE + r)
 
 #define IRQ_UART_NUM	12
 #define UARTDR			0x00
@@ -17,7 +20,7 @@
 #define UARTICR			0x44
 
 static inline
-void __fastinline serial_enable_rxe(u32 v)
+void __always_inline serial_enable_rxe(u32 v)
 {
 	u32 curr = rread(UARTCR);
 	if (v)
@@ -27,7 +30,7 @@ void __fastinline serial_enable_rxe(u32 v)
 }
 
 static inline
-void __fastinline serial_enable_txe(u32 v)
+void __always_inline serial_enable_txe(u32 v)
 {
 	u32 curr = rread(UARTCR);
 	if (v)
@@ -37,7 +40,7 @@ void __fastinline serial_enable_txe(u32 v)
 }
 
 static inline
-void __fastinline enable_txe_irq(u32 v)
+void __always_inline enable_txe_irq(u32 v)
 {
 	u32 curr = rread(UARTIMSC);
 	if (v)
@@ -47,7 +50,7 @@ void __fastinline enable_txe_irq(u32 v)
 }
 
 static inline
-void __fastinline enable_rxe_irq(u32 v)
+void __always_inline enable_rxe_irq(u32 v)
 {
 	u32 curr = rread(UARTIMSC);
 	if (v)
@@ -57,19 +60,19 @@ void __fastinline enable_rxe_irq(u32 v)
 }
 
 static inline
-void __fastinline clear_txe_irq()
+void __always_inline clear_txe_irq()
 {
 	rwrite(UARTICR, (1 << 5));
 }
 
 static inline
-void __fastinline clear_rxe_irq()
+void __always_inline clear_rxe_irq()
 {
 	rwrite(UARTICR, (1 << 6));
 }
 
 static inline
-void __fastinline serial_wait()
+void __always_inline serial_wait()
 {
 	do {
 		(void) 0;

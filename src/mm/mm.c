@@ -8,9 +8,11 @@
  * pf - page frame
  * pfbb - page frame bitmap block
  */
-#include "io.h"
-#include "platform.h"
-#include "memmgr.h"
+#include <asm/io.h>
+#include <asm/platform.h>
+#include <kernel/mm.h>
+#include <printk.h>
+#include <memory.h>
 
 #define BITMAP_PAGES	((MEMORY_SIZE / PAGE_SIZE) / 8)
 
@@ -133,7 +135,11 @@ void *page_alloc_align(u32 align, u32 pages)
 	u32 pg = 0;
 	u32 fit = 0;
 	u32 res = 0;
-	
+
+	/* no alignment */
+	if (align == 0)
+		align = 1;
+
 	for (; pg < total_frames; pg += align) {
 		if (pf_state(pg))
 			continue;

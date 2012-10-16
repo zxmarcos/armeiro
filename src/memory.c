@@ -3,7 +3,7 @@
  * These functions work spliting memory word write/read and bytes write/read
  * Marcos Medeiros
  */
-#include "base.h"
+#include <kernel/types.h>
 
 void memclr(void *ptr, u32 size)
 {

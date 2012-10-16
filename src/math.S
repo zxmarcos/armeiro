@@ -2,7 +2,7 @@
  * Marcos Medeiros
  */
 
-#include "asm.h"
+#include "asm/asm.h"
 
 .section .text
 /* __sys_uidiv:

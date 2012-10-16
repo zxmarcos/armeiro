@@ -1,9 +1,10 @@
 /* MMU stuff
  * Marcos Medeiros
  */
-#include "base.h"
-#include "mmu.h"
-#include "platform.h"
+#include <kernel/types.h>
+#include <asm/mmu.h>
+#include <asm/platform.h>
+#include <errno.h>
 
 void domain_set_protection(int present)
 {

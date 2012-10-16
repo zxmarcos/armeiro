@@ -2,12 +2,13 @@
  * Kernel main function
  * Marcos Medeiros
  */
-#include "io.h"
-#include "platform.h"
-#include "scheduler.h"
-#include "memmgr.h"
-#include "serial.h"
-#include "cpu.h"
+#include <asm/io.h>
+#include <asm/platform.h>
+#include <asm/serial.h>
+#include <asm/cpu.h>
+#include <kernel/scheduler.h>
+#include <kernel/mm.h>
+#include <kernel/irq.h>
 
 void kmain()
 {
@@ -33,6 +34,7 @@ void kmain()
 	printk("Kmap_sp_abt: %x\n", Kmap_sp_abt);
 
 	scheduler_init();
+
 	irq_enable();
 
 	for(;;) {

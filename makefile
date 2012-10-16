@@ -7,7 +7,7 @@ LIST = kernel.list
 LINKER = kernel.ld
 MAP = kernel.map
 INCLUDE = $(SRC)include/
-CFLAGS = -mcpu=arm926ej-s -O3 -Wall -Wextra -nostdlib -nostartfiles -ffreestanding -std=gnu99
+CFLAGS = -mcpu=arm926ej-s -O3 -Wall -Wextra -nostdinc -nostdlib -nostartfiles -ffreestanding -std=gnu99
 
 # main path
 OBJECTS := $(patsubst $(SRC)%.S,$(BIN)%.o,$(wildcard $(SRC)*.S))
@@ -33,7 +33,7 @@ $(BIN)kernel.elf : $(OBJECTS) $(LINKER)
 
 $(BIN)%.o: $(SRC)%.S
 	@echo AS  $<
-	@$(ARMTC)-gcc -I $(INCLUDE) -E  -mcpu=arm926ej-s $< -o $@.s
+	@$(ARMTC)-gcc -nostdinc -I $(INCLUDE) -E  -mcpu=arm926ej-s $< -o $@.s
 	@$(ARMTC)-as -I $(INCLUDE) -mcpu=arm926ej-s $@.s -o $@
 
 $(BIN)%.o: $(SRC)%.c

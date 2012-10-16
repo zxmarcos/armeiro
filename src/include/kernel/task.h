@@ -1,9 +1,9 @@
 #ifndef __TASK_H
 #define __TASK_H
 
-#include "base.h"
-#include "cpu.h"
-#include "memmgr.h"
+#include <kernel/types.h>
+#include <asm/context.h>
+#include <asm/cpu.h>
 
 #define TASK_RUNNABLE	1
 

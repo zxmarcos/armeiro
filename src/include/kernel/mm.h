@@ -1,7 +1,7 @@
-#ifndef __MEMMGR_H
-#define __MEMMGR_H
+#ifndef __MM_H
+#define __MM_H
 
-#include "base.h"
+#include <kernel/types.h>
 
 /* Useful macros */
 #define __va_to_pgdir(n)	((n & 0xfff00000) >> 20)

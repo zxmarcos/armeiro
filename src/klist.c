@@ -1,7 +1,7 @@
 /* Kernel linked lists
  * Marcos Medeiros
  */
-#include "memmgr.h"
+#include <kernel/mm.h>
 #include "klist.h"
 
 void klist_init(klist_t *kl)

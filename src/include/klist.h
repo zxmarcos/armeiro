@@ -1,7 +1,7 @@
 #ifndef __KLIST_H
 #define __KLIST_H
 
-#include "base.h"
+#include <kernel/types.h>
 
 struct klist;
 struct klist_node;
