@@ -5,6 +5,7 @@
 
 /* compiler flags */
 #define __packed	__attribute__((packed))
+#define __noinline	__attribute__((noinline))
 #define __always_inline	__attribute__((always_inline))
 /* macro to create bitmasks */
 #define BIT_MASK(l, f)	\

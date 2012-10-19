@@ -171,15 +171,6 @@ ENTRY(__cpu_do_context_switch)
 .endm
 
 
-ENTRY(cpu_delay)
-	cmp		r0, #0
-	moveq	pc, lr
-1:
-	subs	r0, #1	@ 1 cycle
-	bne		1b		@ 3 cycle
-	mov		pc, lr
-
-
 
 @ =============================================================================
 @ SYSCALL (SWI) stuff

@@ -31,5 +31,6 @@ extern u32 __cpu_getid();
 extern u32 __cpu_getcachet();
 extern u32 __cpu_gettcmst();
 extern void cpu_delay(u32 n);
+extern void __udelay(u32 ms);
 
 #endif

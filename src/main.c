@@ -10,6 +10,8 @@
 #include <kernel/mm.h>
 #include <kernel/irq.h>
 
+
+extern void clock_init();
 void kmain()
 {
 	irq_disable();
@@ -17,11 +19,15 @@ void kmain()
 
 	serial_init();
 
+	printk("HIPSTER SO, ");
+	printk("escrito por Marcos Medeiros\n");
+
 	cpu_init();
 
 	/* First we setup the memory manager */
 	mm_init();
 
+	clock_init();
 	/* Init our scheduler timer */
 	timer_init();
 

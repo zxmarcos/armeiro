@@ -68,7 +68,7 @@ void cpu_init()
 	u32 info = __cpu_getid();
 	u32 cache = __cpu_getcachet();
 	u32 tcm = __cpu_gettcmst();
-	printk("cpu info: arch:%d, num:%x, rev:%d\n\tvar:%x, vendor:%x\n", CPUID_ARCH(info),
+	printk("cpu info: arch: ARM%d, num:%x, rev:%d\n\tvar:%x, vendor:%x\n", CPUID_ARCH(info),
 		CPUID_PARTNUM(info), CPUID_REV(info), CPUID_VENDOR(info));
 	printk("\tcache type:%x, tcm status: %x\n", cache, tcm);
 }

@@ -39,7 +39,7 @@ $(BIN)%.o: $(SRC)%.S
 $(BIN)%.o: $(SRC)%.c
 	@echo CC  $<
 	@$(ARMTC)-gcc $(CFLAGS) -c -I $(INCLUDE) $< -o $@
-#	@$(ARMTC)-gcc -mcpu=arm926ej-s -O3 -S -Wall -Wextra -nostdlib -nostartfiles -ffreestanding -std=gnu99 -c -I $(SRC) $< -o $@.S
+	@$(ARMTC)-gcc $(CFLAGS) -S -c -I $(INCLUDE) $< -o $@.S
 
 	
 clean: 

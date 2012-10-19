@@ -33,7 +33,7 @@ int __section_map_identy(struct pgdir_t *dir, u32 start, u32 end)
 	end >>= 20;
 
 	pages = end - start + 1;
-	printk("%d sections needed to map 1x1 to %x:%x\n", pages, __start, __end);
+	printk("%d sections used to map 1x1 to %x:%x\n", pages, __start, __end);
 
 	for (i = 0; i < pages; i++) {
 		dir->pgtbl[page_addr] = (void *) make_section(page_addr << 20, KERNEL_DOMAIN, 0, 0, 0);
