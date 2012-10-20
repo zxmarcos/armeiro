@@ -14,6 +14,10 @@
 void timer_init();
 void timer_irq_clear();
 void printk(const char *fmt, ...);
+void arch_init();
+
+void vic_setup();
+
 
 extern u32 Kmap_start;
 extern u32 Kmap_addr;

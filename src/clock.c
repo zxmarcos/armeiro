@@ -108,6 +108,7 @@ void __calibrate_cpu_freq()
 
 void clock_init()
 {
+	printk("rtc starting...\n");
 	writel(__iobase + RTCCR, RTC_ENABLE);
 	__calibrate_cpu_freq();
 
