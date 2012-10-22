@@ -1,4 +1,3 @@
-
 SRC = src/
 BIN = bin/
 ARMTC = arm-none-eabi
@@ -7,7 +6,7 @@ LIST = kernel.list
 LINKER = kernel.ld
 MAP = kernel.map
 INCLUDE = $(SRC)include/
-CFLAGS = -mcpu=arm926ej-s -O3 -Wall -Wextra -nostdinc -nostdlib -nostartfiles -ffreestanding -std=gnu99
+CFLAGS = -mcpu=arm926ej-s -O3 -marm -Wall -Wextra -nostdinc -nostdlib -nostartfiles -ffreestanding -std=gnu99
 
 # main path
 OBJECTS := $(patsubst $(SRC)%.S,$(BIN)%.o,$(wildcard $(SRC)*.S))
