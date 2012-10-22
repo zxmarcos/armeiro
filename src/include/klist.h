@@ -6,6 +6,9 @@
 struct klist;
 struct klist_node;
 
+#define klist_entry(ptr)	(ptr)->current->data
+#define klist_reset(ptr)	(ptr)->current = (ptr)->head
+
 struct klist {
 	struct klist_node *head;
 	struct klist_node *tail;
@@ -27,7 +30,7 @@ void klist_remove(klist_t *kl, void *data);
 void klist_add_head(klist_t *kl, void *data);
 void klist_add_tail(klist_t *kl, void *data);
 
-static inline int klist_size(klist_t *kl) {
+static inline u32 klist_size(klist_t *kl) {
 	return kl->nodes;
 }
 

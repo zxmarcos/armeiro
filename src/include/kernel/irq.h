@@ -2,7 +2,9 @@
 #define __IRQ_H
 
 #include <kernel/types.h>
+#include <asm/context.h>
 
+typedef int (*isr_callback_t)(struct cpu_ctx *cpu);
 
 struct irq_ctrl {
 	int (*init)();
@@ -23,7 +25,7 @@ void irq_setup_ctrl(struct irq_ctrl *ctrl);
 void irq_enable_line(int num);
 void irq_disable_line(int num);
 void irq_init();
-int irq_install_isr(int num, void (*isr)());
+int irq_install_isr(int num, int (*isr)());
 int irq_uninstall_isr(int num);
 
 #endif
