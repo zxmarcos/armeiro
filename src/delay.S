@@ -8,7 +8,7 @@
 __loops_per_second: .word 0
 
 
-ENTRY(__loops_wait)
+ENTRY(__loopz_wait)
 1:
 	ldr		r2, [r0]	@ wait for first irq
 	cmp		r2, #0
@@ -23,11 +23,11 @@ ENTRY(__loops_wait)
 	bne		2b			@ 3 cycles
 						@-------------------
 						@ 8 cycles total
-	adr		r1, __loops_per_second
-	str		r0, [r1]
 	mov		pc, lr
-.global __cycles_per_loop
-__cycles_per_loop: .word 8
+
+ENTRY(__loopz_atomic_cycles)
+	mov		r0, #8
+	mov		pc, lr
 
 ENTRY(cpu_delay)
 	cmp		r0, #0

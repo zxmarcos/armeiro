@@ -94,6 +94,8 @@ void klist_remove(klist_t *kl, void *data)
 				kl->head = node->next;
 			else
 				last->next = node->next;
+			if (node == kl->current)
+				kl->current = last->next;
 			kfree(node);
 			kl->nodes--;
 			return;
