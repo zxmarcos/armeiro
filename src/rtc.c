@@ -18,6 +18,11 @@ int rtc_init()
 	return -ERR_OK;
 }
 
+u32 rtc_get_counter()
+{
+	return rtc_tick_counter;
+}
+
 int rtc_register_device(struct rtc_device *dev)
 {
 	if (!dev)
@@ -46,7 +51,6 @@ int rtc_tick_event()
 	for (u32 i = 0; i < lsize; i++) {
 		/* current node in list */
 		event = (struct rtc_event *) klist_entry(&__rtc_events);
-		printk("rtc: ev %x, tick %d\n", event, event->tick_counter);
 		if (event) {
 			event->tick_counter--;
 			if (event->tick_counter != 0) {

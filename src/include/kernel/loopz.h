@@ -9,5 +9,6 @@ extern u32 __loopz_per_ns;
 extern u32 __loopz_cpufreq;
 
 int loopz_init();
+void atomic_delay(u32 ns);
 
 #endif

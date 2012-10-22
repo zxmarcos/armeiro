@@ -28,5 +28,6 @@ int rtc_register_event(struct rtc_event *ev);
 int rtc_remove_event(int id);
 int rtc_tick_event();
 int rtc_sectotime(u32 data, struct sys_time *ts);
+u32 rtc_get_counter();
 
 #endif
