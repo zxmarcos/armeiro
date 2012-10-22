@@ -10,7 +10,7 @@
 #include <errno.h>
 #include <memory.h>
 
-typedef void (*isr_callback_t)(struct cpu_ctx *cpu);
+
 isr_callback_t isr_handler_table[32] = { NULL };
 
 struct irq_ctrl *__irqctrl = NULL;
