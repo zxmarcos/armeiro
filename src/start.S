@@ -165,7 +165,7 @@ ENTRY(__cpu_do_context_switch)
 .macro pop_cpu_ctx
 	eor		r0, r0
 	adr		r1, __cpu_is_save
-	str		r1, [r0]
+	str		r0, [r1]
 	add		sp, #4*4 @sp,lr,pc,cpsr
 	ldmfd	sp!, {r0-r12}
 .endm
