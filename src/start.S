@@ -51,6 +51,7 @@ ivector_table_end:
 ENTRY(boot_start)
 	ldr		sp, =Kstack_svc_addr	@ setup our svc stack
 	bl		copy_ivector
+	bl		setup_svc_stack
 	bl		setup_irq_stack
 	bl		setup_fiq_stack
 	bl		setup_usys_stack
@@ -149,7 +150,7 @@ ENTRY(__cpu_do_context_switch)
 	mov		r1, r13					@ r1 = sp
 	mov		r2, r14					@ r2 = lr
 
-	msr		cpsr, r0				@ switch back to IRQ mode
+	msr		cpsr, r0				@ switch back
 
 	@ save sp,lr,pc
 	stmfd	sp!, {r1-r2,lr}
@@ -267,6 +268,16 @@ setup_abt_stack:
 	orr		r1, #CPSR_ABT_MODE
 	msr		cpsr, r1				@ enter SYS mode
 	ldr		sp, =Kstack_abt_addr
+	msr		cpsr, r0
+	mov		pc, lr
+
+@ Setup SVC stack
+setup_svc_stack:
+	mrs		r0, cpsr
+	bic		r1, r0, #CPSR_MODE_MASK
+	orr		r1, #CPSR_SVC_MODE
+	msr		cpsr, r1				@ enter SYS mode
+	ldr		sp, =Kstack_svc_addr
 	msr		cpsr, r0
 	mov		pc, lr
 
