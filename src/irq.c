@@ -21,6 +21,7 @@ void irq_setup_ctrl(struct irq_ctrl *ctrl)
 	printk("Initializing irq controller...\n");
 	__irqctrl = ctrl;
 	__irqctrl->init(ctrl);
+	printk("irq_ctrl: %s registered!\n", __irqctrl->name);
 }
 
 /* IRQ Handler ISR dispatcher

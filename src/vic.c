@@ -104,7 +104,7 @@ static struct irq_ctrl vic_irq_ctrl = {
 	.enable_line = vic_enable_line,
 	.disable_line = vic_disable_line,
 	.handler = vic_irq_handler,
-	.name = "ARM-VIC"
+	.name = "arm-vic"
 };
 
 void vic_setup()

@@ -12,6 +12,7 @@ struct task_ctx {
 	const char *name;
 	u32 pid;
 	u32 flags;
+	unsigned int time_slice;
 };
 
 #endif

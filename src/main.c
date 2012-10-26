@@ -29,7 +29,9 @@ void kmain()
 	arch_setup();
 
 	loopz_init();
-	//scheduler_init();
+	scheduler_init();
+
+	prempt_enable();
 	irq_enable();
 	for(;;) {
 		(void) 0;

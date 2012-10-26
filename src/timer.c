@@ -6,11 +6,12 @@
 #include <asm/cpu.h>
 #include <kernel/scheduler.h>
 #include <kernel/irq.h>
+#include <kernel/rtc.h>
 
 #define TIMER_IRQ_NUM	5
-#define IOBASE	0x101e3000
-#define rwrite(r, v)	writel(IOBASE + r, v)
-#define rread(r)		readl(IOBASE + r)
+#define TICKHZ			1000
+#define __clk			1000000
+#define __iobase		0x101e3000
 
 enum TimerRegisters {
 	T1_LOAD		 = 0x00,
@@ -29,42 +30,29 @@ enum TimerRegisters {
 	T2_BGLOAD	 = 0x38,
 };
 
-void timer_irq_handler(struct cpu_ctx *ctx)
+volatile u32 __last_tick_time = 0;
+volatile u32 __tick_counter = 0;
+
+int timer_irq_handler(struct cpu_ctx *ctx)
 {
-	(void) ctx;
-	/* clear timer irq pending */
-	rwrite(T1_INTCTRL, 0);
+	__tick_counter++;
+	writel(__iobase + T1_INTCTRL, 0);
 	scheduler();
+	(void) ctx;
+	return 0;
 }
 
 void timer_init()
 {
-#if 0
 	/* We need to disable timer before writing new values */
-	rwrite(T1_CTRL, 0);
+	writel(__iobase + T1_CTRL, 0);
 	/* Setup timer1 in periodic mode */
-	rwrite(T1_BGLOAD, 0);
-	rwrite(T1_LOAD, 150000/2);
-	/* enable timer, configure as Periodic, div16, interrupt enable */
-	rwrite(T1_CTRL, 0xE6);
+	writel(__iobase + T1_BGLOAD, 0);
+	writel(__iobase + T1_LOAD, (__clk / TICKHZ) * 10);
+	/* enable timer, configure as Periodic, div1, interrupt enable */
+	writel(__iobase + T1_CTRL, 0xe2);
 
 	irq_install_isr(TIMER_IRQ_NUM, timer_irq_handler);
 	/* enable interrupt line */
 	irq_enable_line(TIMER_IRQ_NUM);
-#elif 0
-	sp804_reset();
-	__delay_calibrate();
-#endif
 }
-
-void sp804_reset()
-{
-	/* disable timer */
-	rwrite(T1_CTRL, 0);
-	rwrite(T1_LOAD, 0xffffffff);
-	rwrite(T1_CTRL, 0xa2);
-}
-
-#undef IOBASE
-#undef rread
-#undef rwrite

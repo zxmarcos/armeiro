@@ -19,7 +19,7 @@ u32 __loopz_cpufreq = 0;
 u32 __loopz_wait(volatile int *w0, volatile int *w1);
 u32 __loopz_atomic_cycles();
 
-static void __loopz_test();
+void __loopz_test();
 
 static int __loopz_event_tick()
 {
@@ -69,7 +69,7 @@ int loopz_init()
 	printk("loopz: %d/s, %d/ms, %d/ns\n\tcpufreq: %dMHz\n", __loopz_per_sec,
 		__loopz_per_ms, __loopz_per_ns, __loopz_cpufreq);
 
-	__loopz_test();
+	/* __loopz_test(); */
 
 	return -ERR_OK;
 }
@@ -83,7 +83,7 @@ void atomic_delay(u32 ns)
 	cpu_delay(loopz);
 }
 
-static void __loopz_test()
+void __loopz_test()
 {
 	printk("loopz: delay 2s: ");
 	u32 ticks = rtc_get_counter();

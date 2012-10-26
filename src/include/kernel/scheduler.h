@@ -3,5 +3,7 @@
 
 void scheduler();
 void scheduler_init();
+void prempt_disable();
+void prempt_enable();
 
 #endif

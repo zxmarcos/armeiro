@@ -6,6 +6,7 @@
 
 #include <kernel/task.h>
 #include <kernel/scheduler.h>
+#include <kernel/loopz.h>
 #include <kernel/mm.h>
 #include <asm/cpu.h>
 #include <asm/context.h>
@@ -15,17 +16,20 @@
 #include <printk.h>
 #include <memory.h>
 
+#define DEF_QUANTUM	1
 #define PID_BASE	256
 
 static u32 __kpidcounter = PID_BASE;
 klist_t active_queue;
+static u32 __prempt_enable = 0;
 
 /* default idle task (kernel main) */
 static struct task_ctx __idle_task = {
 	.cpu = { 0 },
 	.name = "idle_kernel",
 	.pid = 0,
-	.flags = 0,
+	.flags = TASK_RUNNABLE,
+	.time_slice = DEF_QUANTUM,
 };
 
 static struct task_ctx *current_task = &__idle_task;
@@ -54,19 +58,24 @@ void scheduler_create_task(void *f, void *arg, int user_mode)
 		task->cpu.cpsr = 0x1f;
 
 	task->pid = __kpidcounter++;
+	task->flags = TASK_RUNNABLE;
+	task->time_slice = DEF_QUANTUM;
 	klist_add_tail(&active_queue, task);
 }
 
-void C_task1() {
+void task1()
+{
 	for (;;) {
-		printk("task 1\n");
-		cpu_delay(0x3ffffff);
+		printk("task1\n");
+		atomic_delay(1000);
 	}
 }
-void C_task2() {
+
+void task2()
+{
 	for (;;) {
-		printk("task 2\n");
-		cpu_delay(0x3ffffff);
+		printk("task2\n");
+		atomic_delay(1000);
 	}
 }
 
@@ -75,23 +84,65 @@ void scheduler_init()
 	klist_init(&active_queue);
 	klist_add_head(&active_queue, &__idle_task);
 
-	scheduler_create_task(C_task1, NULL, 1);
-	scheduler_create_task(C_task2, NULL, 1);
+	scheduler_create_task(task1, NULL, 0);
+	scheduler_create_task(task2, NULL, 0);
+}
+
+void prempt_disable()
+{
+	__prempt_enable = 0;
+}
+
+void prempt_enable()
+{
+	__prempt_enable = 1;
+}
+
+#define switch_to(prev, next) do {			\
+		cpu_save_context(prev);				\
+		current_task = next;				\
+		cpu_switch_context(current_task);	\
+	} while (0)
+
+
+void do_prempt()
+{
+	if (current_task->time_slice && (current_task->flags & TASK_RUNNABLE)) {
+		current_task->time_slice--;
+		return;	
+	} else {
+		/* quantum expired */
+		if ((current_task->flags & TASK_RUNNABLE) || (!current_task->time_slice))
+			current_task->time_slice = DEF_QUANTUM;
+
+		struct task_ctx *next_task = NULL;
+
+		u32 ntask = 0;
+		u32 ntask_max = klist_size(&active_queue);
+
+		/* select next task to be prempted */
+		for (;;) {
+			if (ntask >= ntask_max)
+				return;
+
+			u32 ret = klist_next(&active_queue);
+			/* only task */
+			if (!ret)
+				return;
+
+			next_task = (struct task_ctx *) klist_entry(&active_queue);
+			if (next_task->flags & TASK_RUNNABLE) {
+				switch_to(current_task, next_task);
+				printk("panic: we should never reach this point! ops...\n");
+				for (;;);
+			}
+			ntask++;
+		}
+	}
 }
 
 void scheduler()
 {
-	/* Just one thread */
-	if (klist_size(&active_queue) < 2)
-		return;
-
-	cpu_save_context(current_task);
-	//cpu_dump(&current_task->cpu, CPU_SHOW_STATUS);
-	
-	/* select next task to be prempted */
-	klist_next(&active_queue);
-
-	current_task = active_queue.current->data;
-	//printk("context_switch to %d\n", current_task->pid);
-	cpu_switch_context(current_task);
+	if (__prempt_enable)
+		do_prempt();	
 }
