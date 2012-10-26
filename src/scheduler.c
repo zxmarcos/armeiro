@@ -7,6 +7,7 @@
 #include <kernel/task.h>
 #include <kernel/scheduler.h>
 #include <kernel/loopz.h>
+#include <kernel/lock.h>
 #include <kernel/mm.h>
 #include <asm/cpu.h>
 #include <asm/context.h>
@@ -63,19 +64,25 @@ void scheduler_create_task(void *f, void *arg, int user_mode)
 	klist_add_tail(&active_queue, task);
 }
 
+static lock_t mylock = 0;
+
 void task1()
 {
 	for (;;) {
-		printk("task1\n");
-		atomic_delay(1000);
+		lock_acquire(&mylock);
+		printk("1 acquired lock!\n");
+		lock_release(&mylock);
+		atomic_delay(1000*10);	
 	}
 }
 
 void task2()
 {
 	for (;;) {
-		printk("task2\n");
-		atomic_delay(1000);
+		lock_acquire(&mylock);
+		printk("2 acquired lock!\n");
+		lock_release(&mylock);
+		atomic_delay(1000*10);
 	}
 }
 
@@ -84,6 +91,7 @@ void scheduler_init()
 	klist_init(&active_queue);
 	klist_add_head(&active_queue, &__idle_task);
 
+	lock_init(&mylock);
 	scheduler_create_task(task1, NULL, 0);
 	scheduler_create_task(task2, NULL, 0);
 }
