@@ -8,6 +8,7 @@
 #include <kernel/scheduler.h>
 #include <kernel/loopz.h>
 #include <kernel/lock.h>
+#include <kernel/semaphore.h>
 #include <kernel/mm.h>
 #include <asm/cpu.h>
 #include <asm/context.h>
@@ -26,7 +27,7 @@ static u32 __prempt_enable = 0;
 
 /* default idle task (kernel main) */
 static struct task_ctx __idle_task = {
-	.cpu = { 0 },
+	.cpu = { 0, .r = { 0 } },
 	.name = "idle_kernel",
 	.pid = 0,
 	.flags = TASK_RUNNABLE,
@@ -69,46 +70,32 @@ void scheduler_create_task(void *f, void *arg, int user_mode)
 	klist_add_tail(&active_queue, task);
 }
 
-static lock_t mylock = 0;
+static semaphore_t sem;
 
 void task1()
 {
 	for (;;) {
-		lock_acquire(&mylock);
-		printk("1 acquired lock!\n");
-		lock_release(&mylock);
-		asm("swi #0");
+		sem_wait(&sem);
+		atomic_delay(1000*1000);
+		sem_signal(&sem);
 	}
 }
 
 void task2()
 {
 	for (;;) {
-		lock_acquire(&mylock);
-		printk("2 acquired lock!\n");
-		lock_release(&mylock);
-		asm("swi #0");
+		sem_wait(&sem);
+		atomic_delay(1000*1000);
+		sem_signal(&sem);
 	}
 }
-
 
 void task3()
 {
 	for (;;) {
-		lock_acquire(&mylock);
-		printk("3 acquired lock!\n");
-		lock_release(&mylock);
-		asm("swi #0");
-	}
-}
-
-void task4()
-{
-	for (;;) {
-		lock_acquire(&mylock);
-		printk("4 acquired lock!\n");
-		lock_release(&mylock);
-		asm("swi #0");
+		sem_wait(&sem);
+		atomic_delay(1000*1000);
+		sem_signal(&sem);
 	}
 }
 
@@ -117,11 +104,10 @@ void scheduler_init()
 	klist_init(&active_queue);
 	klist_add_head(&active_queue, &__idle_task);
 
-	lock_init(&mylock);
+	sem_init(&sem, 2);
 	scheduler_create_task(task1, NULL, 0);
 	scheduler_create_task(task2, NULL, 0);
 	scheduler_create_task(task3, NULL, 0);
-	scheduler_create_task(task4, NULL, 0);
 }
 
 void prempt_disable()
@@ -136,7 +122,7 @@ void prempt_enable()
 
 #define switch_to(prev, next) do {			\
 		cpu_save_context(prev);				\
-		current_task = next;				\
+		current_task = next;					\
 		cpu_switch_context(current_task);	\
 	} while (0)
 
@@ -167,10 +153,13 @@ void do_prempt()
 				return;
 
 			next_task = (struct task_ctx *) klist_entry(&active_queue);
-			if (next_task->flags & TASK_RUNNABLE) {
-				switch_to(current_task, next_task);
-				printk("panic: we should never reach this point! ops...\n");
-				for (;;);
+			if (next_task != current_task) {
+				if (next_task->flags & TASK_RUNNABLE) {
+				//	printk("task switch %d\n", next_task->pid);
+					switch_to(current_task, next_task);
+					printk("panic: we should never reach this point! ops...\n");
+					for (;;);
+				}
 			}
 			ntask++;
 		}

@@ -12,6 +12,7 @@ tmp/
 *.swp
 *~.nib
 *.bat
+*~
 local.properties
 .classpath
 .settings/

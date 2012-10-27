@@ -30,7 +30,8 @@ void syscall_handler(struct cpu_ctx *ctx, u32 id)
 	switch (id) {
 		/* task reschedule */
 		case 0:
-			get_current_task()->time_slice = 0;
+			if (get_current_task()->flags & TASK_RUNNABLE)
+				get_current_task()->time_slice = 0;
 			scheduler();
 			break;
 	}
