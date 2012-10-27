@@ -15,4 +15,6 @@ struct task_ctx {
 	unsigned int time_slice;
 };
 
+struct task_ctx *get_current_task();
+
 #endif

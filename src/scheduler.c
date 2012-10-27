@@ -35,6 +35,11 @@ static struct task_ctx __idle_task = {
 
 static struct task_ctx *current_task = &__idle_task;
 
+struct task_ctx *get_current_task()
+{
+	return current_task;
+}
+
 void scheduler_create_task(void *f, void *arg, int user_mode)
 {
 	struct task_ctx *task = kmalloc(sizeof(struct task_ctx));
@@ -72,7 +77,7 @@ void task1()
 		lock_acquire(&mylock);
 		printk("1 acquired lock!\n");
 		lock_release(&mylock);
-		atomic_delay(1000*10);	
+		asm("swi #0");
 	}
 }
 
@@ -82,7 +87,28 @@ void task2()
 		lock_acquire(&mylock);
 		printk("2 acquired lock!\n");
 		lock_release(&mylock);
-		atomic_delay(1000*10);
+		asm("swi #0");
+	}
+}
+
+
+void task3()
+{
+	for (;;) {
+		lock_acquire(&mylock);
+		printk("3 acquired lock!\n");
+		lock_release(&mylock);
+		asm("swi #0");
+	}
+}
+
+void task4()
+{
+	for (;;) {
+		lock_acquire(&mylock);
+		printk("4 acquired lock!\n");
+		lock_release(&mylock);
+		asm("swi #0");
 	}
 }
 
@@ -94,6 +120,8 @@ void scheduler_init()
 	lock_init(&mylock);
 	scheduler_create_task(task1, NULL, 0);
 	scheduler_create_task(task2, NULL, 0);
+	scheduler_create_task(task3, NULL, 0);
+	scheduler_create_task(task4, NULL, 0);
 }
 
 void prempt_disable()
@@ -135,7 +163,7 @@ void do_prempt()
 
 			u32 ret = klist_next(&active_queue);
 			/* only task */
-			if (!ret)
+			if (ret < 2)
 				return;
 
 			next_task = (struct task_ctx *) klist_entry(&active_queue);

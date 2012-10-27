@@ -84,6 +84,8 @@ __lr: .word 0
 __r0: .word 0
 __cpu_saved_ctx: .word 0
 __cpu_is_save: .word 0
+/* interrupt entry sp */
+__cpu_enter_sp: .word 0
 
 ENTRY(__cpu_do_context_switch)
 	adr		r1, __cpsr
@@ -113,11 +115,9 @@ ENTRY(__cpu_do_context_switch)
 	str		r0, [r1]
 	ldmfd	sp!, {r1}	@ load r1
 
-	@ reset irq stack
-	mrs		r0, cpsr
-	and		r0, #CPSR_MODE_MASK
-	cmp		r0, #CPSR_IRQ_MODE	@ irq mode?
-	ldreq	sp, =Kstack_irq_addr
+	@ clean this stackframe
+	ldr		sp, __cpu_enter_sp
+	add		sp, #4
 
 	ldr		r0, __cpsr
 	msr		cpsr, r0
@@ -128,6 +128,11 @@ ENTRY(__cpu_do_context_switch)
 
 .macro push_cpu_ctx
 	stmfd	sp!, {r0-r12}
+
+	mov		r0, sp
+	add		r0, #13*4
+	adr		r1, __cpu_enter_sp
+	str		r0, [r1]
 	@ save r13, we need to go to last mode
 	@ r5 = spsr
 	@ r1 = r13

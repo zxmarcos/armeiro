@@ -34,6 +34,6 @@ void kmain()
 	prempt_enable();
 	irq_enable();
 	for(;;) {
-		(void) 0;
+		asm("swi #0");
 	}
 }

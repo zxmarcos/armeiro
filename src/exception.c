@@ -6,6 +6,7 @@
 #include <asm/mmu.h>
 #include <asm/platform.h>
 #include <kernel/scheduler.h>
+#include <kernel/task.h>
 
 void __CPU_FIQ arm_fiq()
 {
@@ -25,5 +26,12 @@ void __CPU_ABT arm_abt()
 
 void syscall_handler(struct cpu_ctx *ctx, u32 id)
 {
-	printk("syscall %d from %x\n", id, ctx->pc);
+	(void) ctx;
+	switch (id) {
+		/* task reschedule */
+		case 0:
+			get_current_task()->time_slice = 0;
+			scheduler();
+			break;
+	}
 }
